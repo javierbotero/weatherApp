@@ -1,12 +1,19 @@
-import countries from './countries.json';
-import cities from './city.list.json';
+const cities = require('./city.list.json');
 
 const logic = (() => {
-  const lookForCity = (string, code) => {
-    const filteredCities = cities.filter(
-      obj => obj.name.indexOf(string) !== -1 && obj.country === code
-    );
+  const lookForCity = (string) => {
+    const input = [];
+    string.split(' ').forEach((str) => {
+      const newString = str.toLowerCase();
+      const resultStr = newString[0].toUpperCase() + newString.substring(1, str.length);
+      input.push(resultStr);
+    });
+    console.log(input);
+    const filteredCities = cities.filter(obj => obj.name.indexOf(input.join(' ')) !== -1);
     return filteredCities;
+  };
+  const lookForCodeCity = (event) => {
+    
   };
   const getDataFromApi = async (city) => {
     try {
