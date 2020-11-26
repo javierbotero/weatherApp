@@ -7,12 +7,10 @@ const lookForCity = (string) => {
     const resultStr = newString[0].toUpperCase() + newString.substring(1, str.length);
     input.push(resultStr);
   });
-  console.log(input);
   const filteredCities = cities.filter(obj => obj.name.indexOf(input.join(' ')) !== -1);
   return filteredCities;
 };
 async function getDataFromApi(cityId) {
-  console.log(`https://api.openweathermap.org/data/2.5/weather?id=${cityId}&appid=03a141a48b790e67f9785ad5ec24617c`);
   try {
     const data = await fetch(`https://api.openweathermap.org/data/2.5/weather?id=${cityId}&appid=03a141a48b790e67f9785ad5ec24617c`);
     return data.json();
@@ -23,7 +21,28 @@ async function getDataFromApi(cityId) {
   }
 }
 
+const createWeatherObject = (data) => {
+  const myObj = {
+    clouds: data.clouds.all,
+    coord: data.coord,
+    temp: data.main.temp,
+    tempMin: data.main.temp_min,
+    tempMax: data.main.temp_max,
+    humidity: data.main.temp_min,
+    pressure: data.main.pressure,
+    name: data.name,
+    iconUrl: `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`,
+    description: data.weather[0].description,
+    main: data.weather[0].main,
+    windDeg: data.wind.deg,
+    windSpeed: data.wind.speed,
+  };
+
+  return myObj;
+};
+
 export {
   lookForCity,
   getDataFromApi,
+  createWeatherObject,
 };

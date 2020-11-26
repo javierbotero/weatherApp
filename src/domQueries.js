@@ -1,4 +1,4 @@
-import { lookForCity, getDataFromApi } from './logic';
+import { lookForCity, getDataFromApi, createWeatherObject } from './logic';
 
 const queries = (() => {
   const body = () => document.querySelector('body');
@@ -9,15 +9,15 @@ const queries = (() => {
   const printLayout = () => {
     body().classList = 'bg-primary';
     body().innerHTML = `
-      <header class="text-dark bg-warning">
-        <h2>The Weather App</h2>
+      <header class="text-dark bg-warning p-5 text-center container-fluid">
+        <h2 class="p-2">The Weather App</h2>
         <div class="">
-          <p>Write the city</p>
-          <input type="text" placeholder="city"><br>
-          <button type="">Search City</button>
+          <p class="p-1">Write the city</p>
+          <input type="text" placeholder="city" class="border-0 text-center p-2 my-2"><br>
+          <button type="button" class="btn btn-success p-2">Search City</button>
         </div>
       </header>
-      <div class="results bg-succes"></div>
+      <div class="results bg-succes text-center container p-3"></div>
     `;
   };
   const addListeners = () => {
@@ -30,10 +30,10 @@ const queries = (() => {
       results().innerHTML = '';
       const str = search().value;
       const result = div();
-      result.classList = 'row';
+      result.classList = 'row d-flex justify-content-center';
       lookForCity(str).forEach(city => {
         result.innerHTML += `
-          <div class="col-sm-6">
+          <div class="col-sm-6 cities">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">${city.name}</h5>
@@ -54,24 +54,41 @@ const queries = (() => {
     }
   };
 
+  const printWeatherData = (object) => {
+    results().innerHTML = '';
+    const html = `
+    <div class="card mb-3 text-center bg-success text-white">
+    <img src="${object.iconUrl}" class="card-img-top icon-weather" alt="${object.main}">
+      <div class="card-body">
+        <h4 class="card-title">${object.name}</h4>
+        <h5 class="card-title">${object.main}</h5>
+        <p class="card-text">${object.description}</p>
+        <p class="card-text">clouds: ${object.clouds}%, temp: ${object.temp}, humidity: ${object.humidity}, wind deg: ${object.windDeg}, wind speed: ${object.windSpeed}</p>
+        <p class="card-text"><small class="text-light">General conditions: coord: lat: ${object.coord.lat}, lon: ${object.coord.lon}, pressure: ${object.pressure}, temp max: ${object.tempMax}, temp min: ${object.tempMin} </small></p>
+      </div>
+    </div>
+    `;
+    console.log(html);
+    results().innerHTML = html;
+  };
+
   const printWeather = (e) => {
     if (e.target.dataset.index) {
       const data = getDataFromApi(e.target.dataset.index)
         .then(data => {
-          console.log(data);
-          const myObj = {
-            clouds: data.clouds.all,
-            coord: data.coord,
-            temp: data.main.temp,
-            tempMin: data.main.temp_min,
-            tempMax: data.main.temp_max,
-            humidity: data.main.temp_min,
-            pressure: data.main.pressure,
-            name: data.name,
-          };
+          const myObj = createWeatherObject(data);
           return myObj;
         })
-        .catch(err => { console.log('OOpss, an error:', err); });
+        .then(object => {
+          printWeatherData(object);
+        })
+        .catch(err => {
+          results().innerHTML = `
+          <h5>An error has ocurred</h5>
+          <p>Something went wrong because of this error: ${err}</p>
+          <p>Try later...</p>
+          `;
+        });
     }
   };
 
