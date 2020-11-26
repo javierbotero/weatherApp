@@ -15,7 +15,6 @@ async function getDataFromApi(cityId) {
     const data = await fetch(`https://api.openweathermap.org/data/2.5/weather?id=${cityId}&appid=03a141a48b790e67f9785ad5ec24617c`);
     return data.json();
   } catch (err) {
-    console.log('An error!:', err);
     return `Something wen wrong becasue of this error: ${err}\n
       give it a try again with another option!`;
   }

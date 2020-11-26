@@ -20,10 +20,6 @@ const queries = (() => {
       <div class="results bg-succes text-center container p-3"></div>
     `;
   };
-  const addListeners = () => {
-    body().addEventListener('click', (e) => { printCities(e); });
-    body().addEventListener('click', (e) => { printWeather(e); });
-  };
   const printCities = (e) => {
     e.preventDefault();
     if (e.target.innerHTML === 'Search City') {
@@ -68,13 +64,12 @@ const queries = (() => {
       </div>
     </div>
     `;
-    console.log(html);
     results().innerHTML = html;
   };
 
   const printWeather = (e) => {
     if (e.target.dataset.index) {
-      const data = getDataFromApi(e.target.dataset.index)
+      getDataFromApi(e.target.dataset.index)
         .then(data => {
           const myObj = createWeatherObject(data);
           return myObj;
@@ -92,10 +87,16 @@ const queries = (() => {
     }
   };
 
+  const addListeners = () => {
+    body().addEventListener('click', (e) => { printCities(e); });
+    body().addEventListener('click', (e) => { printWeather(e); });
+  };
+
   return {
     printLayout,
     addListeners,
   };
 })();
 
+// eslint-disable-next-line import/prefer-default-export
 export { queries };
