@@ -1,35 +1,29 @@
-const cities = require('./city.list.json');
+import cities from './city.list.json';
 
-const logic = (() => {
-  const lookForCity = (string) => {
-    const input = [];
-    string.split(' ').forEach((str) => {
-      const newString = str.toLowerCase();
-      const resultStr = newString[0].toUpperCase() + newString.substring(1, str.length);
-      input.push(resultStr);
-    });
-    console.log(input);
-    const filteredCities = cities.filter(obj => obj.name.indexOf(input.join(' ')) !== -1);
-    return filteredCities;
-  };
-  const lookForCodeCity = (event) => {
-    
-  };
-  const getDataFromApi = async (city) => {
-    try {
-      const data = await fetch(`pro.openweathermap.org/data/2.5/forecast/hourly?q={${city}}&appid=9a6d75375af8f269043d2f00f6f9e6d9&mode=json`);
-      return data.json();
-    } catch (err) {
-      console.log('An error!!!!:', err);
-      return `Something wen wrong becasue of this error: ${err}\n
-        give it a try again with another option!`;
-    }
-  };
+const lookForCity = (string) => {
+  const input = [];
+  string.split(' ').forEach((str) => {
+    const newString = str.toLowerCase();
+    const resultStr = newString[0].toUpperCase() + newString.substring(1, str.length);
+    input.push(resultStr);
+  });
+  console.log(input);
+  const filteredCities = cities.filter(obj => obj.name.indexOf(input.join(' ')) !== -1);
+  return filteredCities;
+};
+async function getDataFromApi(cityId) {
+  console.log(`https://api.openweathermap.org/data/2.5/weather?id=${cityId}&appid=03a141a48b790e67f9785ad5ec24617c`);
+  try {
+    const data = await fetch(`https://api.openweathermap.org/data/2.5/weather?id=${cityId}&appid=03a141a48b790e67f9785ad5ec24617c`);
+    return data.json();
+  } catch (err) {
+    console.log('An error!:', err);
+    return `Something wen wrong becasue of this error: ${err}\n
+      give it a try again with another option!`;
+  }
+}
 
-  return {
-    getDataFromApi,
-    lookForCity,
-  };
-})();
-
-export { logic };
+export {
+  lookForCity,
+  getDataFromApi,
+};
