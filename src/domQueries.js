@@ -1,10 +1,14 @@
-import { lookForCity, getDataFromApi, createWeatherObject } from './logic';
+import {
+  lookForCity, getDataFromApi, createWeatherObject, convertTemp,
+} from './logic';
 
 const queries = (() => {
   const body = () => document.querySelector('body');
   const div = () => document.createElement('div');
   const search = () => document.querySelector('input[type="text"]');
   const results = () => document.querySelector('.results');
+  const tempSpans = () => document.querySelectorAll('.celsius');
+  const btnSwitcher = () => document.querySelector('.switcher');
 
   const printLayout = () => {
     body().classList = 'bg-primary';
@@ -59,8 +63,13 @@ const queries = (() => {
         <h4 class="card-title">${object.name}</h4>
         <h5 class="card-title">${object.main}</h5>
         <p class="card-text">${object.description}</p>
-        <p class="card-text">clouds: ${object.clouds}%, temp: ${object.temp}, humidity: ${object.humidity}, wind deg: ${object.windDeg}, wind speed: ${object.windSpeed}</p>
-        <p class="card-text"><small class="text-light">General conditions: coord: lat: ${object.coord.lat}, lon: ${object.coord.lon}, pressure: ${object.pressure}, temp max: ${object.tempMax}, temp min: ${object.tempMin} </small></p>
+        <p class="card-text">clouds: ${Math.round(object.clouds)}%, temp: <span class="celsius">${Math.round(object.temp)}°C</span>, humidity: ${Math.round(object.humidity)}%, wind deg: ${object.windDeg}, wind speed: ${Math.round(object.windSpeed)}m/s</p>
+        <p class="card-text">
+          <small class="text-light">
+            General conditions: coord: lat: ${object.coord.lat}, lon: ${object.coord.lon}, pressure: ${object.pressure}hPa, temp max: <span class="celsius">${Math.round(object.tempMax)}°C</span>, temp min: <span class="celsius">${Math.round(object.tempMin)}°C</span>
+          </small>
+        </p>
+        <button type="button" class="switcher btn btn-warning" data-deg="C">See in Fahrenheit</button>
       </div>
     </div>
     `;
@@ -87,9 +96,16 @@ const queries = (() => {
     }
   };
 
+  const printConvertTemp = (e) => {
+    if (e.target.innerHTML === 'See in Celsius' || e.target.innerHTML === 'See in Fahrenheit') {
+      convertTemp(tempSpans(), btnSwitcher());
+    }
+  };
+
   const addListeners = () => {
     body().addEventListener('click', (e) => { printCities(e); });
     body().addEventListener('click', (e) => { printWeather(e); });
+    body().addEventListener('click', (e) => { printConvertTemp(e); });
   };
 
   return {
