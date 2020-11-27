@@ -4,7 +4,7 @@ The Weather App is a project that comes with Asynchronous Javascript using the o
 
 ## Live Preview
 
-[The Weather App](https://rawcdn.githack.com/javierbotero/weatherApp/fed6cb48657b3c0da6550036a3eb969e689b0763/dist/index.html)
+[The Weather App](https://javierbotero.github.io/weatherApp/)
 ![Screenshot The Weather App](./src/Screenshot-weather-app.png)
 
 ## Built With
