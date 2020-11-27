@@ -1,0 +1,21 @@
+@import '~bootstrap/scss/bootstrap';
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP&family=Oswald:wght@300&display=swap');
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
+.cities {
+  width: 30%;
+}
+
+.icon-weather {
+  height: 150px;
+  width: 150px;
+  margin: 0 auto;
+}
+
+.results {
+  font-family: 'Noto Sans JP', sans-serif;
+}
